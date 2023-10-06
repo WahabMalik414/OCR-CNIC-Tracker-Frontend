@@ -1,9 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploading, isUploaded] = useState<Boolean>(true);
 
+  const navigate=useNavigate()
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files);
@@ -44,7 +47,10 @@ function App() {
     } catch (error) {
       console.error("Error sending files:", error);
     }
+
+   
   };
+  
   return (
     <>
       <h1 className="bg-red-300 text-center mb-12 text-4xl font-bold italic">
@@ -113,7 +119,9 @@ function App() {
             </div>
             <div>
               <button
-                onClick={sendFiles}
+                onClick={()=>{
+                  navigate("/view")
+                }}
                 className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
               >
                 View records
