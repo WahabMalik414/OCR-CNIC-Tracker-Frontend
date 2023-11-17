@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 function App() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [isUploading, isUploaded] = useState<Boolean>(true);
+  const [isUploading, setisUploading] = useState<boolean>(false);
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const files = Array.from(event.target.files);
@@ -24,6 +24,12 @@ function App() {
     }
   };
   const sendFiles = async () => {
+    //add elegant alert TODO:
+    if (selectedFiles.length == 0) {
+      alert("no files selected!");
+      return;
+    }
+    setisUploading(true);
     const formData = new FormData();
     for (const file of selectedFiles) {
       formData.append("files", file);
@@ -39,18 +45,18 @@ function App() {
         }
       );
       if (response.status === 200) {
-        console.log(response.data.logs);
-        console.log("Files sent successfully");
+        setisUploading(false);
+        console.log(response.data);
       } else {
         console.error("Error sending files");
+        setisUploading(false);
       }
     } catch (error) {
+      setisUploading(false);
       console.error("Error sending files:", error);
     }
-
-   
   };
-  
+
   return (
     <>
       <h1 className="bg-red-300 text-center mb-12 text-4xl font-bold italic">
@@ -74,11 +80,11 @@ function App() {
           >
             <div className="grid grid-cols-1 space-y-2 text-center">
               <label className="text-sm font-bold text-gray-500 tracking-wide">
-                Attach Document
+                Attach Documents
               </label>
               <div className="flex items-center justify-center w-full">
                 <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
-                  <div className="h-full w-full text-center flex flex-col items-center justify-center items-center">
+                  <div className="h-full w-full text-center flex flex-col justify-center items-center">
                     <p className="pointer-none text-gray-500">
                       <a className="text-blue-600 hover:underline">
                         select files
@@ -109,20 +115,24 @@ function App() {
               <span>File type: .jpeg, .jpg, .png types of images</span>
             </p>
 
-            <div>
+            <div className="flex justify-center">
               <button
                 onClick={sendFiles}
-                className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+                className="w-2/3 bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-2 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200"
               >
-                Upload
+                Upload to database
               </button>
             </div>
-            <div>
+            <div className="flex justify-center">
               <button
-                onClick={()=>{
-                  navigate("/view")
+                onClick={() => {
+                  if (isUploading) {
+                    alert("files are uploading wait!");
+                  } else {
+                    navigate("/view");
+                  }
                 }}
-                className="my-5 w-full flex justify-center bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-blue-600 shadow-lg cursor-pointer transition ease-in duration-300"
+                className="w-2/3 bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-2 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200"
               >
                 View records
               </button>
