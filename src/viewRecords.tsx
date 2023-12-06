@@ -35,7 +35,7 @@ export default function ViewRecords() {
     }
     fetchData();
   }, []);
-
+  
   return (
     <div>
       {isLoading ? (
@@ -43,14 +43,14 @@ export default function ViewRecords() {
       ) : error ? (
         <p>Error: {(error as Error).message}</p>
       ) : (
-        <div className="flex p-10 bg-yellow-500">
+        <div className="flex p-10 bg-gray-500 h-full">
           {Array.isArray(responseData) ? (
-            <div className="flex w-full bg-yellow-200 relative overflow-x-auto">
+            <div className="flex w-full relative overflow-x-auto">
               <table className="w-full text-sm text-center text-gray-500">
                 <caption className="p-5 text-5xl font-semibold text-gray-900 bg-white">
                   <div className="flex items-center">
                     <button
-                      className="bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-2 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200"
+                      className="bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-4 hover:border-blue-900 shadow-lg cursor-pointer transition ease-in duration-200"
                       onClick={() => navigate("/")}
                     >
                       back
@@ -94,7 +94,11 @@ export default function ViewRecords() {
                       <td key={item.id}>{item.createdDate.toString()}</td>
                       {/* <td key={item.id}>{item.modifiedDate.toString()}</td> */}
                       <td key={item.id}>
-                        <a>Open file</a>
+                        <a
+                          href={`http://localhost:3005/api/files/${item.fileName}`}
+                        >
+                          Open file
+                        </a>
                       </td>
                     </tr>
                   ))}

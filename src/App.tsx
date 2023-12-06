@@ -59,9 +59,6 @@ function App() {
 
   return (
     <>
-      <h1 className="bg-red-300 text-center mb-12 text-4xl font-bold italic">
-        Hello, React + TailwindCSS using Vite
-      </h1>
       <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 bg-no-repeat bg-cover ">
         <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
         <div className="sm:max-w-lg w-full p-10 bg-white rounded-xl z-10">
@@ -118,9 +115,14 @@ function App() {
             <div className="flex justify-center">
               <button
                 onClick={sendFiles}
-                className="w-2/3 bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-2 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200"
+                disabled={isUploading}
+                className={`w-2/3 p-4 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 ${
+                  isUploading
+                    ? "bg-gray-500 text-gray-400 border-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-600 hover:border-blue-800"
+                } shadow-lg cursor-pointer transition ease-in duration-200`}
               >
-                Upload to database
+                {isUploading ? "Uploading..." : "Upload to database"}
               </button>
             </div>
             <div className="flex justify-center">
@@ -132,7 +134,11 @@ function App() {
                     navigate("/view");
                   }
                 }}
-                className="w-2/3 bg-blue-500 text-gray-100 p-4 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-2 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200"
+                className={`w-2/3 p-4 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 ${
+                  isUploading
+                    ? "bg-gray-500 text-gray-400 border-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-600 hover:border-blue-800"
+                } shadow-lg cursor-pointer transition ease-in duration-200`}
               >
                 View records
               </button>
