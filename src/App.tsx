@@ -9,7 +9,17 @@ function App() {
   const navigate = useNavigate();
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
       const files = Array.from(event.target.files);
+      for (const file of files) {
+        if (!allowedTypes.includes(file.type)) {
+          alert(
+            `Invalid file type: ${file.name}. Please select only JPEG or PNG images.`
+          );
+          event.target.value = "";
+          return;
+        }
+      }
       setSelectedFiles(files);
     }
   };
@@ -93,6 +103,7 @@ function App() {
                     type="file"
                     multiple
                     className="hidden"
+                    accept=".jpeg, .jpg, .png"
                     onChange={handleFileSelect}
                   />
                 </label>
@@ -127,6 +138,7 @@ function App() {
             </div>
             <div className="flex justify-center">
               <button
+                disabled={isUploading}
                 onClick={() => {
                   if (isUploading) {
                     alert("files are uploading wait!");
