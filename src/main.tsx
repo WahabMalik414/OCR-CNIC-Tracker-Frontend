@@ -5,15 +5,16 @@ import ViewRecords from "./viewRecords.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./Login.tsx";
+import PrivateRoute from "./privateRoute.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <PrivateRoute component={App} />,
   },
   {
     path: "/view",
-    element: <ViewRecords />,
+    element: <PrivateRoute component={ViewRecords} />,
   },
   {
     path: "/Login",

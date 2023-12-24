@@ -17,10 +17,12 @@ export default function ViewRecords() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<unknown>(null);
   const [search, setSearch] = useState("");
-  
+
   async function fetchData() {
     try {
-      const response = await axios.get("http://localhost:3005/view");
+      const response = await axios.get("http://localhost:3005/view", {
+        withCredentials: true,
+      });
       const data = response.data;
 
       // Wait for all data to arrive
@@ -34,7 +36,6 @@ export default function ViewRecords() {
     }
   }
   useEffect(() => {
-   
     fetchData();
   }, []);
   const data = {
@@ -44,28 +45,28 @@ export default function ViewRecords() {
     setSearch(event.target.value);
   };
 
-  async function handleOpenFile(fileName:string) {
-    const res = await fetch(`http://localhost:3005/api/files/${fileName}`)
-    if(res.status!=200){
-      alert("file doesn't exist.")
+  async function handleOpenFile(fileName: string) {
+    const res = await fetch(`http://localhost:3005/api/files/${fileName}`, {
+      credentials: "include",
+    });
+    if (res.status != 200) {
+      alert("file doesn't exist.");
       return;
     }
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
-
+    window.open(url, "_blank");
   }
-  
-  async function handleDeleteFile(fileHash:string) {
-    const res = await fetch(`http://localhost:3005/api/delete/${fileHash}`)
-    if(res.status===200){
-      alert("File deleted successfully!")
-      fetchData();
 
-    }
-    else if(res.status===404)
-    {
-      alert("File doesn't exist!")
+  async function handleDeleteFile(fileHash: string) {
+    const res = await fetch(`http://localhost:3005/api/delete/${fileHash}`, {
+      credentials: "include",
+    });
+    if (res.status === 200) {
+      alert("File deleted successfully!");
+      fetchData();
+    } else if (res.status === 404) {
+      alert("File doesn't exist!");
     }
   }
   return (
@@ -82,7 +83,7 @@ export default function ViewRecords() {
                 <caption className="p-5 text-xl font-semibold text-gray-900 bg-white">
                   <div className="flex items-center">
                     <button
-                      className="bg-blue-500 text-gray-100 w-40 ml-8 p-4 border-2 border-transparent rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-600 hover:border-2 hover:border-blue-1000 shadow-lg cursor-pointer transition ease-in duration-200"
+                      className="bg-blue-500 text-gray-100 w-40 ml-8 p-4 border-2 border-transparent rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 focus:border-blue-800 hover:bg-blue-700 hover:border-2 hover:border-blue-1000 shadow-lg cursor-pointer transition ease-in duration-200"
                       onClick={() => navigate("/")}
                     >
                       back
@@ -142,12 +143,18 @@ export default function ViewRecords() {
                           })}
                         </td>
                         <td>
-                          <button className="w-2/3 p-2 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-600 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200" onClick={()=>handleOpenFile(item.fileName)}>
+                          <button
+                            className=" p-2 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-600 hover:border-blue-800 shadow-lg cursor-pointer transition ease-in duration-200"
+                            onClick={() => handleOpenFile(item.fileName)}
+                          >
                             Open file
                           </button>
                         </td>
                         <td>
-                          <button className="w-2/3 p-2 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 bg-red-500 text-gray-100 border-red-500 hover:bg-red-600 hover:border-red-800 shadow-lg cursor-pointer transition ease-in duration-200" onClick={()=>handleDeleteFile(item.fileHash)}>
+                          <button
+                            className=" p-2 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 bg-red-500 text-gray-100 border-red-500 hover:bg-red-600 hover:border-red-800 shadow-lg cursor-pointer transition ease-in duration-200"
+                            onClick={() => handleDeleteFile(item.fileHash)}
+                          >
                             Delete file
                           </button>
                         </td>

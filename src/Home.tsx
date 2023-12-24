@@ -52,6 +52,7 @@ function App() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
+          withCredentials: true,
         }
       );
       if (response.status === 200) {
@@ -64,6 +65,23 @@ function App() {
     } catch (error) {
       setisUploading(false);
       console.error("Error sending files:", error);
+    }
+  };
+  // Client-side logout request
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("http://localhost:3005/logout", {
+        credentials: "include",
+      });
+      if (res.status === 200) {
+        localStorage.removeItem("isAuthenticated");
+        navigate("/login");
+        // Additional logic if needed
+      } else {
+        console.error("Logout failed:", res.statusText);
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
   };
 
@@ -130,7 +148,7 @@ function App() {
                 className={`w-2/3 p-4 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 ${
                   isUploading
                     ? "bg-gray-500 text-gray-400 border-gray-500 cursor-not-allowed"
-                    : "bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-600 hover:border-blue-800"
+                    : "bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-700 hover:border-blue-800"
                 } shadow-lg cursor-pointer transition ease-in duration-200`}
               >
                 {isUploading ? "Uploading..." : "Upload to database"}
@@ -149,10 +167,29 @@ function App() {
                 className={`w-2/3 p-4 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 ${
                   isUploading
                     ? "bg-gray-500 text-gray-400 border-gray-500 cursor-not-allowed"
-                    : "bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-600 hover:border-blue-800"
+                    : "bg-blue-500 text-gray-100 border-blue-500 hover:bg-blue-700 hover:border-blue-800"
                 } shadow-lg cursor-pointer transition ease-in duration-200`}
               >
                 View records
+              </button>
+            </div>
+            <div className="flex justify-center">
+              <button
+                disabled={isUploading}
+                onClick={() => {
+                  if (isUploading) {
+                    alert("files are uploading wait!");
+                  } else {
+                    handleLogout();
+                  }
+                }}
+                className={`w-2/3 p-4 border-2 rounded-full tracking-wide font-semibold focus:shadow-outline focus:border-2 ${
+                  isUploading
+                    ? "bg-gray-500 text-gray-400 border-gray-500 cursor-not-allowed"
+                    : "bg-red-500 text-gray-100 border-red-500 hover:bg-red-700 hover:border-red-800"
+                } shadow-lg cursor-pointer transition ease-in duration-200`}
+              >
+                Logout
               </button>
             </div>
           </div>
